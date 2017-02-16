@@ -1,8 +1,13 @@
 # Football_TransferMarket_Crawl
+
 **using scrapy to crawl data from a football transfer market website**
+
 ## Aim: crawl data from a football player tranfer market website named [transfermarkt][1] to do some research.
-## Tools: * Python v2.7
-		  *	[Scrapy][2]
+
+## Tools: 
+* Python v2.7
+* [Scrapy][2]
+
 ## Notes for Files: 
 * ../crawl_league/crawl_league:
  * settings: set to deal with the anti-crawl system
@@ -12,7 +17,8 @@
  * league_spider.py: spider to crawl the league size of different country varies of different seasons
  * LeagueSizeSpider.py: spider to crawl league with detail clubs info.
 
-## Log: 1: * crawl the detail clubs of different leagues during different seasons
+## Log:  
+* crawl the detail clubs of different leagues during different seasons
 
 
 [1]: http://www.transfermarkt.co.uk
