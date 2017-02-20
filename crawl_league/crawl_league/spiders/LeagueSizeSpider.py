@@ -10,7 +10,7 @@ class LeagueSizeSpider(scrapy.Spider):
         'http://www.transfermarkt.co.uk/wettbewerbe/amerika?page=1',
         'http://www.transfermarkt.co.uk/wettbewerbe/afrika?page=1',
     ]
-
+    # step into country from the country on map
     def parse(self,response):
         # lst_league=self.get_league_url(response)
         # # follow links to specific leagues page
@@ -55,18 +55,26 @@ class LeagueSizeSpider(scrapy.Spider):
     def parse_club(self,response):
         season_id=response.url.split('=')[-1]
         league_name=response.url.split('/')[3]
+        league_id = response.url.split('/')[6]
         lst_club=response.css("td.hauptlink.no-border-links.hide-for-small.hide-for-pad a.vereinprofil_tooltip::text").extract()
-        league_size=len(lst_club)
+        lst_club_id= response.css("td.hauptlink.no-border-links.hide-for-small.hide-for-pad a.vereinprofil_tooltip::attr(id)").extract()
+        dct_club = dict(zip(lst_club_id, lst_club))
+        # league_size=len(lst_club)
         league_level=response.css(".profilheader tr:nth-child(1) td::text").extract()[0].strip()
         country_name=response.css(".profilheader tr:nth-child(1) td::text").extract()[1].strip()
+        country_id=response.css(".flagge a::attr(href)").extract_first().split('/')[-1]
 
         # store data
         # dct_league_club=dict(league_name=league_name,season_id=season_id,league_size=league_size,club=lst_club)
         # dct_league_size=dict(league_name=league_name,season_id=season_id,league_size=league_size,league_level=league_level,country_name=country_name)
 
         # store detail club list of each league each season
-        for club in lst_club:
-            dct_league_club = dict(league_name=league_name, season_id=season_id,country_name=country_name, club=club,league_level=league_level)
+        # for club in lst_club:
+        #     dct_league_club = dict(league_name=league_name, season_id=season_id,country_name=country_name, club=club,league_level=league_level)
+        #     yield dct_league_club
+        for club_id,club_name in dct_club.items():
+            dct_league_club = dict(league_name=league_name,league_id=league_id, season_id=season_id, country_name=country_name,
+                                   club_id=club_id,club_name=club_name,country_id=country_id,league_level=league_level)
             yield dct_league_club
         # store league size info to csv file by call 'scrapy crawl leagues_size -o leagues_size_change.csv'
         # yield dct_league_size
